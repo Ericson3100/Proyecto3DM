@@ -5,7 +5,7 @@ from datetime import datetime
 import os
 
 
-def download_stock_data(ticker_symbols, period="max", interval="1d", end_date="2025-02-28"):
+def download_stock_data(ticker_symbols, period="max", interval="1d", end_date="2025-02-28", save_csv=True):
     """
     Descarga datos históricos de acciones usando yfinance y filtra hasta una fecha específica.
     
@@ -15,6 +15,7 @@ def download_stock_data(ticker_symbols, period="max", interval="1d", end_date="2
         period (str): Período de tiempo a descargar (por defecto: "max" para obtener todo el histórico disponible)
         interval (str): Intervalo de tiempo entre datos (por defecto: "1d" para diario)
         end_date (str): Fecha final para filtrar los datos en formato 'YYYY-MM-DD' (por defecto: "2025-02-28")
+        save_csv (bool): Si es True, guarda los datos en archivos CSV (por defecto: True)
         
     Returns:
         dict: Diccionario con DataFrames para cada ticker, cada uno con sus indicadores técnicos
@@ -26,8 +27,9 @@ def download_stock_data(ticker_symbols, period="max", interval="1d", end_date="2
     # Diccionario para almacenar los DataFrames de cada ticker
     ticker_data = {}
     
-    # Crear la carpeta ./data/raw si no existe
-    os.makedirs("./data/raw", exist_ok=True)
+    # Crear la carpeta ./data/raw si no existe y si se van a guardar CSV
+    if save_csv:
+        os.makedirs("./data/raw", exist_ok=True)
     
     for ticker in ticker_symbols:
         # Usar yfinance para descargar los datos históricos
@@ -72,10 +74,11 @@ def download_stock_data(ticker_symbols, period="max", interval="1d", end_date="2
         # Almacenar el DataFrame en el diccionario
         ticker_data[ticker] = historical_data
         
-        # Guardar el DataFrame en un archivo CSV
-        file_path = f"./data/raw/{ticker}_data.csv"
-        historical_data.to_csv(file_path, index=False)
-        print(f"Datos guardados en {file_path}")
+        # Guardar el DataFrame en un archivo CSV si save_csv es True
+        if save_csv:
+            file_path = f"./data/raw/{ticker}_data.csv"
+            historical_data.to_csv(file_path, index=False)
+            print(f"Datos guardados en {file_path}")
         
         print(f"Indicadores calculados para {ticker}:", 
               [col for col in historical_data.columns if col not in ['Date', 'Open', 'High', 'Low', 'Close', 'Volume']])
@@ -83,12 +86,24 @@ def download_stock_data(ticker_symbols, period="max", interval="1d", end_date="2
     return ticker_data
 
 # Ejemplo de uso: descargar datos de múltiples tickers
-tickers = ["^GSPC", "AAPL", "MSFT"]  # S&P 500, Apple, Microsoft
-ticker_data = download_stock_data(tickers, period="max", interval="1d", end_date="2025-02-28")
+tickers = ["^GSPC", "AAPL", "MSFT", "NVDA", "AMZN", "GOOGL"]  # S&P 500, Apple, Microsoft
+ticker_data = download_stock_data(tickers, period="max", interval="1d", end_date="2025-02-28", save_csv=False)
 
-# Ejemplo de cómo acceder a los datos de un ticker específico
+# Añadir datos del S&P 500 a cada acción individual
 sp500_data = ticker_data["^GSPC"]
-apple_data = ticker_data["AAPL"]
+for ticker in tickers:
+    if ticker != "^GSPC":  # Evitar añadir S&P 500 a sí mismo
+        # Combinar datos de la acción con S&P 500 basado en la fecha
+        stock_data = ticker_data[ticker]
+        merged_data = pd.merge(stock_data, 
+                              sp500_data[['Date', 'Open', 'High', 'Low', 'Close', 'Volume']], 
+                              on='Date', 
+                              how='left',
+                              suffixes=('', '_SP500'))
+        
+        # Actualizar el DataFrame en el diccionario
+        ticker_data[ticker] = merged_data
 
-print(sp500_data.tail())
-print(apple_data.tail())
+        file_path = f"./data/raw/{ticker}_with_SP500.csv"
+        merged_data.to_csv(file_path, index=False)
+        print(f"Datos con S&P 500 guardados en {file_path}")
