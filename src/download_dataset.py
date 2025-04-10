@@ -54,23 +54,7 @@ def download_stock_data(ticker_symbols, period="max", interval="1d", end_date="2
         
         print(f"Shape del DataFrame para {ticker}: {historical_data.shape}")
         print(f"Rango de fechas para {ticker}: {historical_data['Date'].min()} a {historical_data['Date'].max()}")
-        
-        # Añadir indicadores técnicos
-        # SMA de 20 y 50 días
-        historical_data['SMA_20'] = ta.sma(historical_data['Close'], length=20)
-        historical_data['SMA_50'] = ta.sma(historical_data['Close'], length=50)
-        
-        # RSI de 14 períodos
-        historical_data['RSI_14'] = ta.rsi(historical_data['Close'], length=14)
-        
-        # MACD
-        macd = ta.macd(historical_data['Close'])
-        historical_data = pd.concat([historical_data, macd], axis=1)
-        
-        # Bandas de Bollinger
-        bollinger = ta.bbands(historical_data['Close'], length=20)
-        historical_data = pd.concat([historical_data, bollinger], axis=1)
-        
+                
         # Almacenar el DataFrame en el diccionario
         ticker_data[ticker] = historical_data
         
