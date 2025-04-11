@@ -9,7 +9,7 @@ class lightGBMRegressor:
     LightGBM model for market value prediction (regression).
     """
 
-    def __init__(self, X_train=None, y_train=None, X_valid=None, y_valid=None, X_test=None, y_test=None):
+    def __init__(self, X_train=None, y_train=None, X_valid=None, y_valid=None):
         """
         Initialize the LightGBM regression model.
 
@@ -25,8 +25,6 @@ class lightGBMRegressor:
         self.y_train = y_train
         self.X_valid = X_valid
         self.y_valid = y_valid
-        self.X_test = X_test
-        self.y_test = y_test
 
         # Initialize the base model
         self.model = lgb.LGBMRegressor(
@@ -87,9 +85,4 @@ class lightGBMRegressor:
         rmse = np.sqrt(mean_squared_error(self.y_test, y_pred))
         r2 = r2_score(self.y_test, y_pred)
 
-        scores = {
-            'rmse': round(rmse, 4),
-            'r2': round(r2, 4)
-        }
-
-        return self.model, scores
+        return self.model, rmse, r2

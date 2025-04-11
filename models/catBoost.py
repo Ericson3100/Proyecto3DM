@@ -76,7 +76,7 @@ class CatBoostRegressor:
         # Predict on validation set
         y_pred = self.model.predict(self.X_valid)
 
-        mse = mean_squared_error(self.y_valid, y_pred)
+        rmse = np.sqrt(mean_squared_error(self.y_valid, y_pred))
         r2 = r2_score(self.y_valid, y_pred)
 
-        return self.model, mse, r2
+        return self.model, rmse, r2

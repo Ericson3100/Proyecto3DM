@@ -1,6 +1,7 @@
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import mean_squared_error, r2_score
+import numpy as np
 def train_random_forest(X_train, y_train, X_val, y_val):
     param_grid = {
         'max_depth': [5, 10, 15],
@@ -15,10 +16,10 @@ def train_random_forest(X_train, y_train, X_val, y_val):
     
     best_model.set_params(n_estimators=500)
     y_pred = best_model.predict(X_val)
-    mse = mean_squared_error(y_val, y_pred)
+    rmse = np.sqrt(mean_squared_error(y_val, y_pred))
     r2 = r2_score(y_val, y_pred)
-    print("\nRandom Forest (Validación):")
-    print(f"MSE: {mse:.2f}")
+    print("\nAdaBoost (Validación):")
+    print(f"MSE: {rmse:.2f}")
     print(f"R²: {r2:.2f}")
     
-    return best_model, mse, r2
+    return best_model, rmse, r2
