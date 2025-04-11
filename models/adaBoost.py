@@ -1,0 +1,22 @@
+from sklearn.ensemble import AdaBoostRegressor
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import mean_squared_error, r2_score
+def train_adaboost(X_train, y_train, X_val, y_val):
+    param_grid = {
+        'n_estimators': [50, 100, 200],
+        'learning_rate': [0.01, 0.1, 1.0],
+        'loss': ['linear', 'square', 'exponential']
+    }
+    ada = AdaBoostRegressor(random_state=42)
+    grid = GridSearchCV(ada, param_grid, cv=5, scoring='neg_mean_squared_error')
+    grid.fit(X_train, y_train)
+    best_model = grid.best_estimator_
+    
+    y_pred = best_model.predict(X_val)
+    mse = mean_squared_error(y_val, y_pred)
+    r2 = r2_score(y_val, y_pred)
+    print("\nAdaBoost (Validación):")
+    print(f"MSE: {mse:.2f}")
+    print(f"R²: {r2:.2f}")
+    
+    return best_model, mse, r2
