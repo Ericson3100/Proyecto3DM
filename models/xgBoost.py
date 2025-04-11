@@ -72,7 +72,7 @@ class xgBoostRegressor:
             xgb.XGBRegressor: Trained model.
             dict: RMSE and R² scores.
         """
-        self.model.set_params(iterations=500)
+        self.model.set_params(n_estimators=500)
         self.model.fit(self.X_train, self.y_train)
 
         # Predict on validation set

@@ -4,7 +4,7 @@
 Proyecto 3 de Data Mining.
 
 Nombres: Ericson López (00326945)
-Andrés Herrera 
+Andrés Herrera (00216962)
 Pablo Herrera
 Elyas García
 Fabián de la Cruz

@@ -26,7 +26,7 @@ class CatBoostRegressor:
         self.y_valid = y_valid
 
         # Initialize the base model
-        self.model = CatBoostModel(logging_level='Silent', train_dir='/tmp/catboost_temp')
+        self.model = CatBoostModel(logging_level='Silent', train_dir='/tmp/catboost_temp', iterations=100)
 
         # Perform hyperparameter tuning
         self.best_params = self.optimize_hyperparameters()
