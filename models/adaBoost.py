@@ -7,7 +7,7 @@ def train_adaboost(X_train, y_train, X_val, y_val):
         'loss': ['linear', 'square', 'exponential']
     }
     ada = AdaBoostRegressor(random_state=42, n_estimators=100)
-    grid = GridSearchCV(ada, param_grid, cv=5, scoring='neg_mean_squared_error')
+    grid = GridSearchCV(ada, param_grid, cv=3, scoring='neg_mean_squared_error', n_jobs=-1)
     grid.fit(X_train, y_train)
     best_model = grid.best_estimator_
     
