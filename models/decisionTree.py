@@ -9,7 +9,7 @@ def train_decision_tree(X_train, y_train, X_val, y_val):
         'min_samples_leaf': [1, 2, 4]
     }
     tree = DecisionTreeRegressor(random_state=42)
-    grid = GridSearchCV(tree, param_grid, cv=5, scoring='neg_mean_squared_error')
+    grid = GridSearchCV(tree, param_grid, cv=5, scoring='neg_mean_squared_error', n_jobs=-1)
     grid.fit(X_train, y_train)
     best_model = grid.best_estimator_
     
