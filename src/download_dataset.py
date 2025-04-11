@@ -5,7 +5,7 @@ from datetime import datetime
 import os
 
 
-def download_stock_data(ticker_symbols, period="max", interval="1d", end_date="2025-02-28", save_csv=True):
+def download_stock_data(ticker_symbols, period="max", interval="1d", end_date="2025-03-31", save_csv=True):
     """
     Descarga datos históricos de acciones usando yfinance y filtra hasta una fecha específica.
     
@@ -14,7 +14,7 @@ def download_stock_data(ticker_symbols, period="max", interval="1d", end_date="2
                                     o una lista para múltiples tickers.
         period (str): Período de tiempo a descargar (por defecto: "max" para obtener todo el histórico disponible)
         interval (str): Intervalo de tiempo entre datos (por defecto: "1d" para diario)
-        end_date (str): Fecha final para filtrar los datos en formato 'YYYY-MM-DD' (por defecto: "2025-02-28")
+        end_date (str): Fecha final para filtrar los datos en formato 'YYYY-MM-DD' (por defecto: "2025-03-31")
         save_csv (bool): Si es True, guarda los datos en archivos CSV (por defecto: True)
         
     Returns:
@@ -39,7 +39,8 @@ def download_stock_data(ticker_symbols, period="max", interval="1d", end_date="2
             interval=interval,
             auto_adjust=True,
             prepost=False,
-            threads=True
+            threads=True,
+            keepna=False 
         )
         
         # Asegurar que es un DataFrame y resetear el índice para tener la fecha como columna
@@ -71,7 +72,7 @@ def download_stock_data(ticker_symbols, period="max", interval="1d", end_date="2
 
 # Ejemplo de uso: descargar datos de múltiples tickers
 tickers = ["^GSPC", "AAPL", "MSFT", "NVDA", "AMZN", "GOOGL"]  # S&P 500, Apple, Microsoft
-ticker_data = download_stock_data(tickers, period="max", interval="1d", end_date="2025-02-28", save_csv=False)
+ticker_data = download_stock_data(tickers, period="max", interval="1d", end_date="2025-03-31", save_csv=False)
 
 # Añadir datos del S&P 500 a cada acción individual
 sp500_data = ticker_data["^GSPC"]
