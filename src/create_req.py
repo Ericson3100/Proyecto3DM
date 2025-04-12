@@ -1,7 +1,7 @@
 import subprocess
 
 # Lista de librerías específicas
-libraries = ["pandas", "matplotlib", "scikit-learn", "numpy"]
+libraries = ["pandas", "matplotlib", "scikit-learn", "numpy","yfinance", "jupyter", "notebook", "seaborn", "tabulate", "pandas_ta","xgboost", "catboost", "joblib", "lightgbm"]
 
 # Obtener versiones de las librerías
 with open("requirements.txt", "w") as f:
