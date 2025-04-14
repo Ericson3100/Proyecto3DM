@@ -22,7 +22,7 @@ Instrucciones para instalar el proyecto.
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/Ericson3100/Proyeto3DM.git
+git clone https://github.com/Ericson3100/Proyecto3DM.git
 
 # Navegar al directorio del proyecto
 cd Proyecto3DM
